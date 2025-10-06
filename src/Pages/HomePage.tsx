@@ -32,6 +32,30 @@ export default function HomePage() {
           </AvatarFallback>
         </Avatar>
       </div>
+      {/* Navbar fija debajo del perfil */}
+      <nav
+    className="fixed top-16 left-0 w-full h-14 flex justify-around items-center shadow-md bg-white z-40"
+  >
+    <button className="flex flex-col items-center text-gray-600 hover:text-blue-500 transition">
+      <FaRegClipboard className="text-xl" />
+      <span className="text-xs">Solicitudes</span>
+    </button>
+
+    <button className="flex flex-col items-center text-gray-600 hover:text-yellow-500 transition">
+      <FaRegFolder className="text-xl" />
+      <span className="text-xs">Archivos</span>
+    </button>
+
+    <button className="flex flex-col items-center text-gray-600 hover:text-red-500 transition">
+      <FaBullhorn className="text-xl" />
+      <span className="text-xs">Anuncios</span>
+    </button>
+
+    <button className="flex flex-col items-center text-gray-600 hover:text-green-500 transition">
+      <FaRegCalendarAlt className="text-xl" />
+      <span className="text-xs">Eventos</span>
+    </button>
+  </nav>
 
       <div className="pt-24 space-y-12">
         <h1 className="text-3xl font-bold mb-4">Bienvenida a la Homepage 🎉</h1>
@@ -76,9 +100,9 @@ export default function HomePage() {
         </div>
 
         {/* Sección de las tarjetas debajo del último carrusel */}
-        <div className="mt-12"> {/* Agrega un margen superior para separarlo del carrusel */}
+        <div className="mt-20 mb-16 px-4"> {/* Agrega un margen superior para separarlo del carrusel */}
           <h2 className="text-xl font-semibold mb-4">Acciones Rápidas</h2>
-          <div className="flex flex-wrap justify-center sm:justify-start"> {/* Centra en pantallas pequeñas, alinea a la izquierda en grandes */}
+          <div className="flex flex-wrap justify-center gap-6 p-4"> {/* Centra en pantallas pequeñas, alinea a la izquierda en grandes */}
             <Card
               title="Solicitudes"
               icon={<FaRegClipboard className="text-white" />}
