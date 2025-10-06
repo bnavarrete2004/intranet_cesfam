@@ -3,6 +3,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import Carousel from "react-bootstrap/Carousel";
 import Carouselcn from "@/components/ui/Carouselcn";
 import Card from "../components/ui/Card"; // Asegúrate de que la ruta sea correcta
+import { Calendar as MiniCalendar } from "../components/ui/MiniCalendar";
+
+
 
 // Importa los íconos específicos de la familia Font Awesome (Fa)
 // Asegúrate de haber instalado react-icons: npm install react-icons
@@ -129,7 +132,18 @@ export default function HomePage() {
             />
           </div>
         </div>
+
+        {/* Sección del calendario */}
+        <div className="mt-16 px-4 flex justify-center lg:justify-end">
+          <div className="max-w-md w-full">
+            <h1 className="text-2xl font-bold mb-6 text-center lg:text-right">Fechas importantes</h1>
+            <div className="p-4 bg-white shadow-lg rounded-2xl">
+              <MiniCalendar />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    
   );
 }
