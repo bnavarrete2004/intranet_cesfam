@@ -1,14 +1,19 @@
-import React from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
-import Carousel from "react-bootstrap/Carousel"
-import Carouselcn from "@/components/ui/Carouselcn"
+import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import Carousel from "react-bootstrap/Carousel";
+import Carouselcn from "@/components/ui/Carouselcn";
+import Card from "../components/ui/Card"; // Asegúrate de que la ruta sea correcta
 
-import slide1 from "../components/images/cesfam_1.jpg"
-import slide2 from "../components/images/cesfam_2.jpg"
-import slide3 from "../components/images/cesfam_3.jpg"
+// Importa los íconos específicos de la familia Font Awesome (Fa)
+// Asegúrate de haber instalado react-icons: npm install react-icons
+import { FaRegClipboard, FaRegFolder, FaBullhorn, FaRegCalendarAlt } from 'react-icons/fa';
+
+import slide1 from "../components/images/cesfam_1.jpg";
+import slide2 from "../components/images/cesfam_2.jpg";
+import slide3 from "../components/images/cesfam_3.jpg";
 
 export default function HomePage() {
-  const slides = [slide1, slide2, slide3]
+  const slides = [slide1, slide2, slide3];
 
   return (
     <div className="px-4">
@@ -69,7 +74,38 @@ export default function HomePage() {
             <Carouselcn slides={slides} />
           </div>
         </div>
+
+        {/* Sección de las tarjetas debajo del último carrusel */}
+        <div className="mt-12"> {/* Agrega un margen superior para separarlo del carrusel */}
+          <h2 className="text-xl font-semibold mb-4">Acciones Rápidas</h2>
+          <div className="flex flex-wrap justify-center sm:justify-start"> {/* Centra en pantallas pequeñas, alinea a la izquierda en grandes */}
+            <Card
+              title="Solicitudes"
+              icon={<FaRegClipboard className="text-white" />}
+              bgColor="#60A5FA" // Azul
+              textColor="white"
+            />
+            <Card
+              title="Archivos"
+              icon={<FaRegFolder className="text-white" />}
+              bgColor="#FCD34D" // Amarillo
+              textColor="white"
+            />
+            <Card
+              title="Anuncios"
+              icon={<FaBullhorn className="text-white" />}
+              bgColor="#EF4444" // Rojo
+              textColor="white"
+            />
+            <Card
+              title="Eventos"
+              icon={<FaRegCalendarAlt className="text-white" />}
+              bgColor="#34D399" // Verde
+              textColor="white"
+            />
+          </div>
+        </div>
       </div>
     </div>
-  )
+  );
 }
