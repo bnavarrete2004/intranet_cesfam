@@ -4,13 +4,14 @@ import HomePage from "./Pages/HomePage"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.min.js" // necesario para el carousel
 import LoginPage from "./Pages/login"
+import Calendario from "./Pages/Calendario"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<Calendario />} />
       </Routes>
     </Router>
   )
