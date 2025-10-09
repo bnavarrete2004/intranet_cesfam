@@ -6,13 +6,14 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js" // necesario para el carousel
 import LoginPage from "./Pages/login"
 import Calendario from "./Pages/Calendario"
 import TableroActividades from "./Pages/TableroActividades"
+import ComunicadosOficiales from "./Pages/ComunicadosOficiales"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<TableroActividades />} />
+        <Route path="/" element={<ComunicadosOficiales />} />
       </Routes>
     </Router>
   )
