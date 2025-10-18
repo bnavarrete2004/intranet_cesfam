@@ -7,13 +7,14 @@ import LoginPage from "./Pages/login"
 import Calendario from "./Pages/Calendario"
 import TableroActividades from "./Pages/TableroActividades"
 import ComunicadosOficiales from "./Pages/ComunicadosOficiales"
+import DirectorioFuncionarios from "./Pages/DirectorioFuncionarios"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<ComunicadosOficiales />} />
+        <Route path="/" element={<DirectorioFuncionarios />} />
       </Routes>
     </Router>
   )
