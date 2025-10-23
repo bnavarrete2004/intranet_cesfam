@@ -8,13 +8,14 @@ import Calendario from "./Pages/Calendario"
 import TableroActividades from "./Pages/TableroActividades"
 import ComunicadosOficiales from "./Pages/ComunicadosOficiales"
 import DirectorioFuncionarios from "./Pages/DirectorioFuncionarios"
+import LicenciasMedicas from "./Pages/LicenciasMedicas"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<DirectorioFuncionarios />} />
+        <Route path="/" element={<LicenciasMedicas />} />
       </Routes>
     </Router>
   )
