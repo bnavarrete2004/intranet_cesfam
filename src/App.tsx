@@ -9,13 +9,14 @@ import TableroActividades from "./Pages/TableroActividades"
 import ComunicadosOficiales from "./Pages/ComunicadosOficiales"
 import DirectorioFuncionarios from "./Pages/DirectorioFuncionarios"
 import LicenciasMedicas from "./Pages/LicenciasMedicas"
+import PerfilUsuario from "./Pages/PerfilUsuario"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LicenciasMedicas />} />
+        <Route path="/" element={<PerfilUsuario />} />
       </Routes>
     </Router>
   )
