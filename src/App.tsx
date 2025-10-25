@@ -10,13 +10,15 @@ import ComunicadosOficiales from "./Pages/ComunicadosOficiales"
 import DirectorioFuncionarios from "./Pages/DirectorioFuncionarios"
 import LicenciasMedicas from "./Pages/LicenciasMedicas"
 import PerfilUsuario from "./Pages/PerfilUsuario"
+import VacacionesBanner from "./components/common/VacacionesBanner"
+import LandingPage from "./Pages/LandingPage"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<PerfilUsuario />} />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </Router>
   )
