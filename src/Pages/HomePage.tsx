@@ -1,522 +1,372 @@
-// ======================================================
-// PÁGINA PRINCIPAL: Homepage Intranet CESFAM
-// Ubicación: src/pages/Homepage.tsx
-// Descripción: Centro de comando de la intranet
-// ======================================================
-
-'use client';
-
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/cardsn';
-import { QuickAccessWidget } from '../components/common/QuickAccessWidget';
-import type { Reminder, Notification } from '../types/homepage';
-import { PRIORITY_CONFIG, NOTIFICATION_CONFIG } from '../types/homepage';
-import {
-  mockQuickAccess,
-  mockReminders,
-  mockNotifications,
-  mockFeaturedEmployees,
-  getGreeting,
-  formatFullDate
-} from '../data/mockHomepage';
-import {
-  Calendar,
-  Bell,
-  CheckCircle2,
-  Circle,
-  Megaphone,
-  Users,
-  TrendingUp,
-  Clock,
+import React, { useState, useEffect } from 'react';
+import { 
+  Calendar, 
+  Megaphone, 
+  PartyPopper, 
+  CheckSquare, 
+  Bell, 
+  Users, 
+  FileText, 
+  UserCircle, 
+  Settings,
+  ChevronRight,
   Award,
-  ChevronRight
+  Briefcase,
+  Phone,
+  Clock,
+  Check
 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/cardsn';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 
-// ======================================================
-// COMPONENTE PRINCIPAL
-// ======================================================
 
-const Homepage: React.FC = () => {
-  // ======================================================
-  // ESTADOS
-  // ======================================================
+const Homepage = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [userName] = useState('María González');
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
-  const [reminders, setReminders] = useState<Reminder[]>(mockReminders);
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
-  const currentUser = { nombre: 'María', apellidos: 'González' }; // Mock user
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentDate(new Date()), 60000);
+    return () => clearInterval(timer);
+  }, []);
 
-  // ======================================================
-  // MANEJADORES
-  // ======================================================
-
-  const handleNavigate = (route: string) => {
-    console.log('Navegando a:', route);
-    // En producción: navigate(route)
+  const formatDate = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    return date.toLocaleDateString('es-CL', options);
   };
 
-  const toggleReminder = (id: string) => {
-    setReminders(reminders.map(r =>
-      r.id === id ? { ...r, completed: !r.completed } : r
+  const getMiniCalendar = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days = [];
+
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(i);
+    }
+    return days;
+  };
+
+  const comunicados = [
+    { id: 1, title: 'Actualización del protocolo de atención', author: 'Dr. Ramírez', date: '20 Oct', type: 'Importante' },
+    { id: 2, title: 'Cambios en horarios de turnos', author: 'RR.HH.', date: '18 Oct', type: 'Info' },
+    { id: 3, title: 'Capacitación en nuevos sistemas', author: 'TI', date: '15 Oct', type: 'Formación' },
+    { id: 4, title: 'Recordatorio: Evaluaciones anuales', author: 'Dirección', date: '12 Oct', type: 'Aviso' }
+  ];
+
+  const actividades = [
+    { id: 1, title: 'Aniversario CESFAM', date: '30 Oct', icon: Calendar },
+    { id: 2, title: 'Asado de fin de mes', date: '02 Nov', icon: Users },
+    { id: 3, title: 'Día del Funcionario', date: '15 Nov', icon: Award }
+  ];
+
+  const recordatorios = [
+    { id: 1, text: 'Completar informe mensual', completed: false },
+    { id: 2, text: 'Revisar solicitudes pendientes', completed: false },
+    { id: 3, text: 'Actualizar datos de contacto', completed: true },
+    { id: 4, text: 'Asistir a reunión de equipo', completed: false }
+  ];
+
+  const [tasks, setTasks] = useState(recordatorios);
+
+  const toggleTask = (id: number) => {
+    setTasks(tasks.map(task => 
+      task.id === id ? { ...task, completed: !task.completed } : task
     ));
   };
 
-  const markNotificationRead = (id: string) => {
-    setNotifications(notifications.map(n =>
-      n.id === id ? { ...n, read: true } : n
-    ));
-  };
+  const notificaciones = [
+    { id: 1, message: 'Nueva solicitud de licencia médica pendiente', time: '15 min' },
+    { id: 2, message: 'Documento aprobado: Informe trimestral', time: '1 h' },
+    { id: 3, message: 'Recordatorio: Reunión a las 15:00', time: '2 h' }
+  ];
 
-  const unreadCount = notifications.filter(n => !n.read).length;
-  const pendingReminders = reminders.filter(r => !r.completed).length;
+  const destacados = [
+    { id: 1, name: 'Carlos Muñoz', area: 'Enfermería' },
+    { id: 2, name: 'Ana Torres', area: 'Atención al Usuario' },
+    { id: 3, name: 'Luis Pérez', area: 'Medicina General' }
+  ];
 
-  // ======================================================
-  // RENDERIZADO
-  // ======================================================
+  const accesosRapidos = [
+    { icon: FileText, label: 'Licencias Médicas', color: 'bg-blue-500' },
+    { icon: Briefcase, label: 'Documentos', color: 'bg-purple-500' },
+    { icon: Users, label: 'Directorio', color: 'bg-teal-500' },
+    { icon: Settings, label: 'Configuración', color: 'bg-slate-500' }
+  ];
+
+  const monthName = currentDate.toLocaleDateString('es-CL', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-cyan-50">
-      {/* ======================================================
-          HERO HEADER
-          ====================================================== */}
-      <header className="bg-gradient-to-r from-[#009DDC] via-[#4DFFF3] to-[#52FFB8] shadow-2xl">
-        <div className="max-w-[1800px] mx-auto px-6 py-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            {/* Saludo y fecha */}
-            <div className="text-white">
-              <h1 className="text-4xl md:text-5xl font-bold mb-2 drop-shadow-lg">
-                {getGreeting()}, {currentUser.nombre}! 👋
-              </h1>
-              <p className="text-lg md:text-xl text-white/90 flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
-                {formatFullDate(new Date())}
-              </p>
-            </div>
-
-            {/* Logo CESFAM */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-white/20">
-              <div className="text-center">
-                <div className="text-6xl mb-2">🏥</div>
-                <p className="text-white font-bold text-lg">CESFAM</p>
-                <p className="text-white/80 text-sm">Intranet Institucional</p>
+    <div className="min-h-screen bg-slate-50">
+      {/* Header Profesional */}
+      <div className="bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[#009DDC] rounded-lg flex items-center justify-center">
+                <Briefcase className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-slate-900">Bienvenido, {userName}</h1>
+                <p className="text-sm text-slate-600 capitalize">{formatDate(currentDate)}</p>
               </div>
             </div>
-          </div>
-
-          {/* Estadísticas rápidas */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            <div className="bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/30 rounded-lg">
-                  <Bell className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">{unreadCount}</p>
-                  <p className="text-white/80 text-xs">Notificaciones</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/30 rounded-lg">
-                  <CheckCircle2 className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">{pendingReminders}</p>
-                  <p className="text-white/80 text-xs">Pendientes</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/30 rounded-lg">
-                  <Calendar className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">8</p>
-                  <p className="text-white/80 text-xs">Eventos hoy</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/30 rounded-lg">
-                  <Users className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">24</p>
-                  <p className="text-white/80 text-xs">Funcionarios</p>
-                </div>
-              </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" className="gap-2 text-xs">
+                <UserCircle className="w-3.5 h-3.5" />
+                Mi Perfil
+              </Button>
+              <Button size="sm" className="gap-2 bg-[#009DDC] hover:bg-[#0088c0] text-xs">
+                <Calendar className="w-3.5 h-3.5" />
+                Calendario
+              </Button>
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* ======================================================
-          CONTENIDO PRINCIPAL - WIDGETS
-          ====================================================== */}
-      <main className="max-w-[1800px] mx-auto px-6 py-8">
-        {/* Accesos rápidos */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-6 h-6 text-[#009DDC]" />
-            Accesos Rápidos
-          </h2>
-          <QuickAccessWidget
-            items={mockQuickAccess}
-            onNavigate={handleNavigate}
-          />
-        </section>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="grid grid-cols-12 gap-4">
+          
+          {/* Columna Izquierda */}
+          <div className="col-span-12 lg:col-span-8 space-y-4">
+            
+            {/* Accesos Rápidos */}
+            <Card className="shadow-sm border-slate-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold text-slate-900">Accesos Rápidos</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-4 gap-3">
+                  {accesosRapidos.map((acceso, i) => {
+                    const Icon = acceso.icon;
+                    return (
+                      <button
+                        key={i}
+                        className="flex flex-col items-center gap-2 p-3 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-200"
+                      >
+                        <div className={`w-10 h-10 ${acceso.color} rounded-lg flex items-center justify-center`}>
+                          <Icon className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-xs font-medium text-slate-700 text-center leading-tight">{acceso.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Grid de widgets principales */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* WIDGET: Recordatorios */}
-          <Card className="shadow-xl border-0 overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-yellow-50 to-orange-50 border-b-2 border-yellow-200">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Clock className="w-5 h-5 text-yellow-600" />
-                Mis Recordatorios
-                {pendingReminders > 0 && (
-                  <span className="ml-auto px-2 py-1 bg-yellow-500 text-white text-xs rounded-full">
-                    {pendingReminders}
-                  </span>
-                )}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                {reminders.slice(0, 4).map((reminder) => {
-                  const priorityConfig = PRIORITY_CONFIG[reminder.priority];
-                  return (
-                    <div
-                      key={reminder.id}
+            {/* Grid de Widgets Principales */}
+            <div className="grid grid-cols-2 gap-4">
+              
+              {/* Comunicados Recientes */}
+              <Card className="shadow-sm border-slate-200">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                      <Megaphone className="w-4 h-4 text-[#009DDC]" />
+                      Comunicados
+                    </CardTitle>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs text-[#009DDC]">
+                      Ver todos
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {comunicados.slice(0, 3).map((com) => (
+                    <div key={com.id} className="p-2 rounded-md bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-100">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-slate-800 truncate">{com.title}</p>
+                          <p className="text-xs text-slate-500 mt-0.5">{com.author} • {com.date}</p>
+                        </div>
+                        <Badge variant="secondary" className="text-xs px-1.5 py-0 h-5 shrink-0">{com.type}</Badge>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Próximas Actividades */}
+              <Card className="shadow-sm border-slate-200">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                    <PartyPopper className="w-4 h-4 text-[#009DDC]" />
+                    Próximas Actividades
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {actividades.map((act) => {
+                    const Icon = act.icon;
+                    return (
+                      <div key={act.id} className="flex items-center gap-3 p-2 rounded-md bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100">
+                        <div className="w-8 h-8 bg-[#009DDC] bg-opacity-10 rounded-lg flex items-center justify-center shrink-0">
+                          <Icon className="w-4 h-4 text-[#009DDC]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-slate-800 truncate">{act.title}</p>
+                          <p className="text-xs text-slate-500">{act.date}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </CardContent>
+              </Card>
+
+            </div>
+
+            {/* Mini Calendario */}
+            <Card className="shadow-sm border-slate-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-[#009DDC]" />
+                    {monthName}
+                  </CardTitle>
+                  <Button variant="ghost" size="sm" className="h-7 text-xs text-[#009DDC]">
+                    Ver completo
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-7 gap-1 text-center mb-2">
+                  {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((day, i) => (
+                    <div key={i} className="text-xs font-semibold text-slate-500 py-1">{day}</div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-7 gap-1">
+                  {getMiniCalendar().map((day, i) => (
+                    <button
+                      key={i}
+                      onClick={() => day && setSelectedDate(day)}
                       className={`
-                        p-3 rounded-lg border-l-4
-                        ${reminder.completed ? 'bg-gray-50 opacity-60' : 'bg-white'}
-                        ${reminder.completed ? 'border-gray-300' : `border-${reminder.priority === 'high' ? 'red' : reminder.priority === 'medium' ? 'yellow' : 'gray'}-400`}
-                        hover:shadow-md transition-all cursor-pointer
+                        aspect-square rounded-md text-xs transition-all flex items-center justify-center
+                        ${!day ? 'invisible' : ''}
+                        ${day === currentDate.getDate() 
+                          ? 'bg-[#009DDC] text-white font-semibold' 
+                          : 'hover:bg-slate-100 text-slate-700'}
+                        ${selectedDate === day && day !== currentDate.getDate() ? 'ring-1 ring-[#009DDC]' : ''}
                       `}
-                      onClick={() => toggleReminder(reminder.id)}
                     >
-                      <div className="flex items-start gap-3">
-                        <button className="mt-1">
-                          {reminder.completed ? (
-                            <CheckCircle2 className="w-5 h-5 text-green-500" />
-                          ) : (
-                            <Circle className="w-5 h-5 text-gray-400" />
-                          )}
-                        </button>
-                        <div className="flex-1">
-                          <p className={`text-sm font-medium ${reminder.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
-                            {reminder.title}
-                          </p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-xs text-gray-500">
-                              {reminder.dueDate.toLocaleDateString('es-ES')}
-                            </span>
-                            <span className={`px-2 py-0.5 rounded text-xs font-semibold ${priorityConfig.badge} border`}>
-                              {priorityConfig.label}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <button className="w-full mt-4 py-2 text-sm text-[#009DDC] font-semibold hover:bg-blue-50 rounded-lg transition-colors">
-                Ver todos los recordatorios →
-              </button>
-            </CardContent>
-          </Card>
+                      {day}
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* WIDGET: Notificaciones */}
-          <Card className="shadow-xl border-0 overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 border-b-2 border-blue-200">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Bell className="w-5 h-5 text-blue-600" />
-                Notificaciones
-                {unreadCount > 0 && (
-                  <span className="ml-auto px-2 py-1 bg-blue-500 text-white text-xs rounded-full animate-pulse">
-                    {unreadCount}
-                  </span>
-                )}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                {notifications.slice(0, 3).map((notification) => {
-                  const config = NOTIFICATION_CONFIG[notification.type];
-                  return (
-                    <div
-                      key={notification.id}
-                      className={`
-                        p-3 rounded-lg ${config.bg}
-                        ${notification.read ? 'opacity-60' : ''}
-                        hover:shadow-md transition-all cursor-pointer
-                      `}
-                      onClick={() => markNotificationRead(notification.id)}
-                    >
-                      <div className="flex items-start gap-3">
-                        <span className="text-xl">{config.icon}</span>
-                        <div className="flex-1">
-                          <p className={`text-sm font-semibold ${config.color}`}>
-                            {notification.title}
-                          </p>
-                          <p className="text-xs text-gray-600 mt-1">
-                            {notification.message}
-                          </p>
-                          <p className="text-xs text-gray-400 mt-1">
-                            {notification.date.toLocaleString('es-ES')}
-                          </p>
-                        </div>
-                        {!notification.read && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <button className="w-full mt-4 py-2 text-sm text-[#009DDC] font-semibold hover:bg-blue-50 rounded-lg transition-colors">
-                Ver todas las notificaciones →
-              </button>
-            </CardContent>
-          </Card>
+          </div>
 
-          {/* WIDGET: Funcionarios Destacados */}
-          <Card className="shadow-xl border-0 overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b-2 border-purple-200">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Award className="w-5 h-5 text-purple-600" />
-                Destacados del Mes
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="space-y-4">
-                {mockFeaturedEmployees.map((employee, index) => {
-                  const initials = `${employee.nombre.charAt(0)}${employee.apellidos.charAt(0)}`;
-                  const colors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500'];
-                  return (
-                    <div
-                      key={employee.id}
-                      className="p-3 bg-gradient-to-r from-white to-purple-50 rounded-lg hover:shadow-md transition-all"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-12 h-12 rounded-full ${colors[index]} flex items-center justify-center text-white font-bold shadow-md`}>
-                          {initials}
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-bold text-gray-900">
-                            {employee.nombre} {employee.apellidos}
-                          </p>
-                          <p className="text-xs text-gray-600">{employee.area}</p>
-                          <p className="text-xs text-purple-600 font-semibold mt-1">
-                            🏆 {employee.logro}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Widgets de comunicados y próximas actividades */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          {/* WIDGET: Comunicados Recientes */}
-          <Card className="shadow-xl border-0">
-            <CardHeader className="bg-gradient-to-r from-red-50 to-orange-50">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Megaphone className="w-5 h-5 text-red-600" />
-                Comunicados Recientes
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="p-3 bg-white hover:bg-red-50 rounded-lg border border-gray-200 hover:border-red-200 transition-all cursor-pointer group">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
-                          Actualización del Protocolo de Atención de Urgencias
-                        </p>
-                        <p className="text-xs text-gray-600 mt-1">Subdirección Médica</p>
-                        <p className="text-xs text-gray-400 mt-1">20 de octubre, 2025</p>
-                      </div>
-                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-colors" />
+          {/* Columna Derecha */}
+          <div className="col-span-12 lg:col-span-4 space-y-4">
+            
+            {/* Notificaciones */}
+            <Card className="shadow-sm border-slate-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                  <Bell className="w-4 h-4 text-[#009DDC]" />
+                  Notificaciones
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {notificaciones.map((notif) => (
+                  <div key={notif.id} className="p-2 rounded-md bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer border-l-2 border-[#009DDC]">
+                    <p className="text-xs text-slate-800 leading-snug">{notif.message}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <Clock className="w-3 h-3 text-slate-400" />
+                      <p className="text-xs text-slate-500">{notif.time}</p>
                     </div>
                   </div>
                 ))}
-              </div>
-              <button
-                onClick={() => handleNavigate('/comunicados')}
-                className="w-full mt-4 py-2 bg-gradient-to-r from-[#009DDC] to-[#4DFFF3] text-white font-semibold rounded-lg hover:shadow-lg transition-all"
-              >
-                Ver todos los comunicados
-              </button>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          {/* WIDGET: Próximas Actividades */}
-          <Card className="shadow-xl border-0">
-            <CardHeader className="bg-gradient-to-r from-green-50 to-cyan-50">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Calendar className="w-5 h-5 text-green-600" />
-                Próximas Actividades
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                {[
-                  { titulo: 'Almuerzo de Camaradería', fecha: '25 de octubre', emoji: '🍽️' },
-                  { titulo: 'Torneo de Fútbol', fecha: '28 de octubre', emoji: '⚽' },
-                  { titulo: 'Cumpleaños del Mes', fecha: '30 de octubre', emoji: '🎂' }
-                ].map((actividad, i) => (
-                  <div key={i} className="p-3 bg-white hover:bg-green-50 rounded-lg border border-gray-200 hover:border-green-200 transition-all cursor-pointer group">
-                    <div className="flex items-center gap-3">
-                      <div className="text-3xl">{actividad.emoji}</div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
-                          {actividad.titulo}
-                        </p>
-                        <p className="text-xs text-gray-600">{actividad.fecha}</p>
-                      </div>
-                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
+            {/* Recordatorios */}
+            <Card className="shadow-sm border-slate-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                  <CheckSquare className="w-4 h-4 text-[#009DDC]" />
+                  Mis Recordatorios
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-1.5">
+                {tasks.map((task) => (
+                  <div 
+                    key={task.id} 
+                    className="flex items-start gap-2 p-2 rounded-md hover:bg-slate-50 cursor-pointer transition-colors"
+                    onClick={() => toggleTask(task.id)}
+                  >
+                    <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5 ${
+                      task.completed ? 'bg-[#009DDC] border-[#009DDC]' : 'border-slate-300'
+                    }`}>
+                      {task.completed && <Check className="w-3 h-3 text-white" />}
+                    </div>
+                    <span className={`text-xs leading-snug ${task.completed ? 'line-through text-slate-400' : 'text-slate-700'}`}>
+                      {task.text}
+                    </span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Destacados del Mes */}
+            <Card className="shadow-sm border-slate-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-[#009DDC]" />
+                  Destacados del Mes
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {destacados.map((dest) => (
+                  <div key={dest.id} className="flex items-center gap-3 p-2 rounded-md bg-slate-50 hover:bg-slate-100 transition-colors">
+                    <div className="w-9 h-9 bg-gradient-to-br from-[#009DDC] to-[#4DFFF3] rounded-full flex items-center justify-center text-white font-semibold text-xs shrink-0">
+                      {dest.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-slate-800 truncate">{dest.name}</p>
+                      <p className="text-xs text-slate-500 truncate">{dest.area}</p>
                     </div>
                   </div>
                 ))}
-              </div>
-              <button
-                onClick={() => handleNavigate('/actividades')}
-                className="w-full mt-4 py-2 bg-gradient-to-r from-[#52FFB8] to-[#4DFFF3] text-gray-900 font-semibold rounded-lg hover:shadow-lg transition-all"
-              >
-                Ver todas las actividades
-              </button>
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
 
-        {/* Widget de mini calendario (placeholder) */}
-        <Card className="shadow-xl border-0 mt-6">
-          <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Calendar className="w-5 h-5 text-indigo-600" />
-              Calendario del Mes
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="text-center py-8">
-              <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 mb-4">Vista previa del calendario institucional</p>
-              <button
-                onClick={() => handleNavigate('/calendario')}
-                className="px-6 py-3 bg-gradient-to-r from-[#009DDC] to-[#4DFFF3] text-white font-semibold rounded-lg hover:shadow-lg transition-all"
-              >
-                Abrir Calendario Completo
-              </button>
-            </div>
-          </CardContent>
-        </Card>
-      </main>
-
-      {/* ======================================================
-          FOOTER
-          ====================================================== */}
-      <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white mt-16">
-        <div className="max-w-[1800px] mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
-            {/* Columna 1: Info */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="text-4xl">🏥</div>
-                <div>
-                  <h3 className="font-bold text-lg">CESFAM</h3>
-                  <p className="text-sm text-gray-400">Intranet Institucional</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-400">
-                Sistema integral de gestión y comunicación para el personal del Centro de Salud Familiar.
-              </p>
-            </div>
-
-            {/* Columna 2: Enlaces rápidos */}
-            <div>
-              <h3 className="font-bold mb-4">Enlaces Rápidos</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    → Calendario Institucional
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    → Comunicados Oficiales
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    → Directorio de Funcionarios
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    → Gestión de Licencias
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Columna 3: Soporte */}
-            <div>
-              <h3 className="font-bold mb-4">Soporte y Ayuda</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    📧 Soporte Técnico
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    📋 Políticas de Uso
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    📞 Contacto Mesa de Ayuda
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    ❓ Preguntas Frecuentes
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
 
-          {/* Copyright */}
-          <div className="border-t border-gray-700 pt-6 text-center">
-            <p className="text-sm text-gray-400">
-              © 2025 CESFAM - Centro de Salud Familiar. Todos los derechos reservados.
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              Intranet Institucional v1.0 | Sistema desarrollado para la gestión integral del personal
-            </p>
+        </div>
+      </div>
+
+      {/* Footer Minimalista */}
+      <footer className="bg-white border-t border-slate-200 mt-8">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-slate-600">Intranet CESFAM — Sistema Institucional 2025</p>
+            <div className="flex gap-4 text-xs text-slate-600">
+              <a href="#" className="hover:text-[#009DDC] transition-colors flex items-center gap-1">
+                <Phone className="w-3 h-3" />
+                Soporte
+              </a>
+              <a href="#" className="hover:text-[#009DDC] transition-colors">Políticas</a>
+              <a href="#" className="hover:text-[#009DDC] transition-colors">Contacto</a>
+            </div>
           </div>
         </div>
       </footer>
     </div>
   );
 };
-
-// ======================================================
-// EXPORT
-// ======================================================
 
 export default Homepage;
