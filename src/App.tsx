@@ -12,13 +12,14 @@ import LicenciasMedicas from "./Pages/LicenciasMedicas"
 import PerfilUsuario from "./Pages/PerfilUsuario"
 import VacacionesBanner from "./components/common/VacacionesBanner"
 import LandingPage from "./Pages/LandingPage"
+import SoporteTecnico from "./Pages/SoporteTecnico"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<SoporteTecnico />} />
       </Routes>
     </Router>
   )
