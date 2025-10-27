@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/cardsn';
 import { UploadCloud, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from '../../types/licencia';
 import { formatFileSize } from '../../data/mockLicencias';

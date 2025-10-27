@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/cardsn';
 import { SearchBar } from '../components/ui/SearchBar';
 import type { Employee, AreaType, RoleType } from '../types/employee';
 import { ROLE_CONFIG, AREA_CONFIG } from '../types/employee';

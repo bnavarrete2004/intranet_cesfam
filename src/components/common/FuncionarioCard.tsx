@@ -7,7 +7,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/cardsn';
 import type { Employee } from '../../types/employee';
 import { ROLE_CONFIG, AREA_CONFIG } from '../../types/employee';
 import { Mail, Phone, User } from 'lucide-react';

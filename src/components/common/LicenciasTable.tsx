@@ -7,7 +7,7 @@
 'use client';
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/cardsn';
 import type { LicenciaMedica } from '../../types/licencia';
 import { FILE_TYPE_CONFIG, STATUS_CONFIG } from '../../types/licencia';
 import { formatFileSize } from '../../data/mockLicencias';

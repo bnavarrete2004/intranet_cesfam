@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/cardsn';
 import type { UserProfile, Activity, PersonalDocument, Notification } from '../types/perfil';
 import { ACTIVITY_COLORS, DOCUMENT_COLORS } from '../types/perfil';
 import {

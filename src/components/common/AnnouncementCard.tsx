@@ -7,7 +7,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/cardsn';
 import type { Announcement } from '../../types/announcement';
 import { CATEGORY_CONFIG } from '../../types/announcement';
 import { AttachmentLink } from './AttachmentLink';

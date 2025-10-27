@@ -7,7 +7,7 @@ import { PlusIcon } from "lucide-react" // Asegúrate de tener 'lucide-react' in
 
 import { Button } from "@/components/ui/button" // Ruta a tu componente Button de shadcn
 import { Calendar } from "@/components/ui/calendar" // Ruta a tu componente Calendar de shadcn
-import { Card, CardContent, CardFooter } from "@/components/ui/card" // Ruta a tus componentes Card de shadcn
+import { Card, CardContent, CardFooter } from "@/components/ui/cardsn" // Ruta a tus componentes Card de shadcn
 
 const events = [
   {

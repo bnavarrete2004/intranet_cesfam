@@ -7,7 +7,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/cardsn';
 import type { Activity } from '../../types/activity';
 import { ACTIVITY_COLORS } from '../../types/activity';
 import { Calendar, MapPin } from 'lucide-react';
