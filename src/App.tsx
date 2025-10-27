@@ -13,13 +13,15 @@ import PerfilUsuario from "./Pages/PerfilUsuario"
 import VacacionesBanner from "./components/common/VacacionesBanner"
 import LandingPage from "./Pages/LandingPage"
 import SoporteTecnico from "./Pages/SoporteTecnico"
+import { Home } from "lucide-react"
+import Homepage from "./Pages/HomePage"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SoporteTecnico />} />
+        <Route path="/" element={<Homepage />} />
       </Routes>
     </Router>
   )
