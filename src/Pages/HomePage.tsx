@@ -227,7 +227,7 @@ const Homepage = () => {
                       return (
                         <div key={act.id} className="flex items-center gap-3 p-2 rounded-md bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100">
                           <div className="w-8 h-8 bg-[#009DDC] bg-opacity-10 rounded-lg flex items-center justify-center shrink-0">
-                            <Icon className="w-4 h-4 text-[#009DDC]" />
+                            <Icon className="w-4 h-4 text-white-700" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-medium text-slate-800 truncate">{act.title}</p>

@@ -15,13 +15,14 @@ import LandingPage from "./Pages/LandingPage"
 import SoporteTecnico from "./Pages/SoporteTecnico"
 import { Home } from "lucide-react"
 import Homepage from "./Pages/HomePage"
+import CalendarioAdmin from "./Pages/ADMIN/CalendarioAdmin"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<CalendarioAdmin />} />
       </Routes>
     </Router>
   )
