@@ -128,14 +128,14 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white">
+        <DialogHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 -mx-6 -mt-6 px-6 py-4 mb-4 border-b-2 border-blue-200">
           <DialogTitle className="text-2xl font-bold text-gray-900">
             {mode === 'create' ? '➕ Crear Nuevo Evento' : '✏️ Editar Evento'}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 py-4">
+        <form onSubmit={handleSubmit} className="space-y-6 px-2">
           {/* Título */}
           <div className="space-y-2">
             <Label htmlFor="titulo" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
