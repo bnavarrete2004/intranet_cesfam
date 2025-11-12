@@ -261,39 +261,16 @@ const CalendarioAdmin: React.FC = () => {
         />
 
         {/* ======================================================
-            MODAL DE VISUALIZACIÓN CON BOTONES ADMIN
+            MODAL DE VISUALIZACIÓN CON BOTONES ADMIN INTEGRADOS
             ====================================================== */}
-        {selectedEvent && (
-          <EventModal
-            event={selectedEvent}
-            isOpen={isViewModalOpen}
-            onClose={handleCloseViewModal}
-          />
-        )}
-
-        {/* Overlay de botones de administración en el modal de visualización */}
-        {isViewModalOpen && selectedEvent && (
-          <div className="fixed inset-0 z-[60] pointer-events-none">
-            <div className="flex items-center justify-center min-h-screen p-4">
-              <div className="pointer-events-auto bg-white rounded-b-lg shadow-xl p-4 max-w-lg w-full -mt-24">
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => handleEditEvent(selectedEvent)}
-                    className="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
-                  >
-                    ✏️ Editar Evento
-                  </button>
-                  <button
-                    onClick={() => handleDeleteClick(selectedEvent)}
-                    className="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
-                  >
-                    🗑️ Eliminar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <EventModal
+          event={selectedEvent}
+          isOpen={isViewModalOpen}
+          onClose={handleCloseViewModal}
+          isAdminView={true}
+          onEdit={handleEditEvent}
+          onDelete={handleDeleteClick}
+        />
 
         {/* ======================================================
             MODAL DE FORMULARIO (CREAR/EDITAR)

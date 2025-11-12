@@ -22,7 +22,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<CalendarioAdmin />} />
+        <Route path="/" element={<LicenciasMedicas />} />
       </Routes>
     </Router>
   )
