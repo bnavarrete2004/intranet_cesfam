@@ -14,7 +14,7 @@ import { FormularioFuncionario } from '@/components/common/Formulariofuncionario
 import type { Employee, AreaType, RoleType } from '@/types/employee';
 import { ROLE_CONFIG, AREA_CONFIG } from '@/types/employee';
 import { mockEmployees, searchEmployees } from '@/data/mockEmployees';
-import { Users, Mail, Phone, Filter, Download, UserPlus, CheckCircle2 } from 'lucide-react';
+import { Users, Mail, Phone, Filter, Download, UserPlus, CheckCircle2, Edit, Trash2 } from 'lucide-react';
 
 // ======================================================
 // FUNCIÓN PARA GENERAR INICIALES
@@ -50,6 +50,8 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<RoleType | 'all'>('all');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({ title: '', description: '' });
+  const [empleadoEditar, setEmpleadoEditar] = useState<Employee | undefined>();
 
   // ======================================================
   // DATOS PROCESADOS
@@ -89,6 +91,12 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
   // MANEJADORES
   // ======================================================
 
+  const mostrarMensajeExito = (title: string, description: string) => {
+    setSuccessMessage({ title, description });
+    setShowSuccessMessage(true);
+    setTimeout(() => setShowSuccessMessage(false), 3000);
+  };
+
   const handleAgregarFuncionario = (nuevoFuncionario: Omit<Employee, 'id'>) => {
     // Generar ID único (en producción vendría del backend)
     const nuevoId = `EMP${(employees.length + 1).toString().padStart(3, '0')}`;
@@ -101,8 +109,58 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
     setEmployees((prev) => [...prev, funcionarioCompleto]);
     
     // Mostrar mensaje de éxito
-    setShowSuccessMessage(true);
-    setTimeout(() => setShowSuccessMessage(false), 3000);
+    mostrarMensajeExito(
+      '¡Funcionario agregado!',
+      'El funcionario ha sido registrado exitosamente'
+    );
+  };
+
+  const handleEditarClick = (employee: Employee) => {
+    setEmpleadoEditar(employee);
+    setDialogOpen(true);
+  };
+
+  const handleGuardarEdicion = (funcionarioEditado: Omit<Employee, 'id'>) => {
+    if (!empleadoEditar) return;
+
+    setEmployees((prev) =>
+      prev.map((emp) =>
+        emp.id === empleadoEditar.id
+          ? { ...funcionarioEditado, id: empleadoEditar.id }
+          : emp
+      )
+    );
+
+    // Mostrar mensaje de éxito
+    mostrarMensajeExito(
+      '¡Datos editados exitosamente!',
+      'Los cambios han sido guardados correctamente'
+    );
+
+    setEmpleadoEditar(undefined);
+  };
+
+  const handleEliminar = (employee: Employee) => {
+    const confirmar = window.confirm(
+      `¿Está seguro que desea eliminar a ${employee.nombre} ${employee.apellidos}?`
+    );
+
+    if (confirmar) {
+      setEmployees((prev) => prev.filter((emp) => emp.id !== employee.id));
+      
+      // Mostrar mensaje de éxito
+      mostrarMensajeExito(
+        '¡Funcionario eliminado!',
+        'El funcionario ha sido eliminado del sistema'
+      );
+    }
+  };
+
+  const handleDialogClose = (open: boolean) => {
+    setDialogOpen(open);
+    if (!open) {
+      setEmpleadoEditar(undefined);
+    }
   };
 
   // ======================================================
@@ -121,8 +179,8 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
               <CheckCircle2 className="w-5 h-5 text-[#52FFB8]" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900">¡Funcionario agregado!</p>
-              <p className="text-sm text-gray-600">El funcionario ha sido registrado exitosamente</p>
+              <p className="font-semibold text-gray-900">{successMessage.title}</p>
+              <p className="text-sm text-gray-600">{successMessage.description}</p>
             </div>
           </div>
         </div>
@@ -151,7 +209,10 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
             <div className="flex gap-3">
               {/* Botón Agregar Funcionario */}
               <Button
-                onClick={() => setDialogOpen(true)}
+                onClick={() => {
+                  setEmpleadoEditar(undefined);
+                  setDialogOpen(true);
+                }}
                 className="bg-gradient-to-r from-[#009DDC] to-[#4DFFF3] hover:opacity-90 shadow-md"
               >
                 <UserPlus className="w-4 h-4 mr-2" />
@@ -240,12 +301,15 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Contacto
                   </th>
+                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-100">
                 {filteredEmployees.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-12 text-center">
+                    <td colSpan={5} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center">
                         <Users className="w-16 h-16 text-gray-300 mb-4" />
                         <p className="text-gray-500 font-medium">No se encontraron funcionarios</p>
@@ -349,6 +413,29 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
                             )}
                           </div>
                         </td>
+
+                        {/* COLUMNA: Acciones */}
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-center gap-2">
+                            {/* Botón Editar */}
+                            <button
+                              onClick={() => handleEditarClick(employee)}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors group"
+                              title="Editar funcionario"
+                            >
+                              <Edit className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            </button>
+
+                            {/* Botón Eliminar */}
+                            <button
+                              onClick={() => handleEliminar(employee)}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors group"
+                              title="Eliminar funcionario"
+                            >
+                              <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     );
                   })
@@ -371,8 +458,9 @@ const DirectorioFuncionariosAdmin: React.FC = () => {
           ====================================================== */}
       <FormularioFuncionario
         open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onSubmit={handleAgregarFuncionario}
+        onOpenChange={handleDialogClose}
+        onSubmit={empleadoEditar ? handleGuardarEdicion : handleAgregarFuncionario}
+        empleadoEditar={empleadoEditar}
       />
     </div>
   );
