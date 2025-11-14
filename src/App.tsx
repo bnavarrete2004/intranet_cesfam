@@ -16,13 +16,14 @@ import SoporteTecnico from "./Pages/SoporteTecnico"
 import { Home } from "lucide-react"
 import Homepage from "./Pages/HomePage"
 import CalendarioAdmin from "./Pages/ADMIN/CalendarioAdmin"
+import DirectorioFuncionariosAdmin from "./Pages/ADMIN/Directoriofuncionariosadmin"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LicenciasMedicas />} />
+        <Route path="/" element={<DirectorioFuncionariosAdmin/>} />
       </Routes>
     </Router>
   )
