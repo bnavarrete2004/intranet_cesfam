@@ -26,7 +26,7 @@ const ComunicadosOficialesAdmin: React.FC = () => {
   // ======================================================
 
   const [announcements, setAnnouncements] = useState<Announcement[]>(mockAnnouncements);
-  //const [isLoading] = useState<boolean>(false);
+  const [isLoading] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState({ title: '', description: '' });
@@ -115,8 +115,8 @@ const ComunicadosOficialesAdmin: React.FC = () => {
     );
 
     mostrarMensajeExito(
-      '¡Comunicado actualizado!',
-      'Los cambios han sido guardados correctamente'
+      '¡Comunicado editado exitosamente!',
+      'El comunicado ha sido editado exitosamente'
     );
 
     setComunicadoEditar(undefined);
@@ -131,8 +131,8 @@ const ComunicadosOficialesAdmin: React.FC = () => {
       setAnnouncements((prev) => prev.filter((comm) => comm.id !== announcement.id));
       
       mostrarMensajeExito(
-        '¡Comunicado eliminado!',
-        'El comunicado ha sido eliminado del sistema'
+        '¡Comunicado eliminado exitosamente!',
+        'El comunicado ha sido eliminado exitosamente'
       );
     }
   };
@@ -317,24 +317,24 @@ const ComunicadosOficialesAdmin: React.FC = () => {
         {/* Lista de comunicados con botones de admin */}
         <div className="space-y-4">
           {sortedAnnouncements.map((announcement) => (
-            <div key={announcement.id} className="relative group">
+            <div key={announcement.id} className="relative">
               {/* Card del comunicado */}
               <div className="bg-white rounded-lg shadow-md border-2 border-gray-100 hover:border-[#009DDC] transition-all p-6">
-                {/* Botones de acción flotantes */}
-                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* Botones de acción siempre visibles */}
+                <div className="absolute top-4 right-4 flex gap-2 z-10">
                   <button
                     onClick={() => handleEditarClick(announcement)}
-                    className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-md"
+                    className="p-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-md hover:shadow-lg hover:scale-105"
                     title="Editar comunicado"
                   >
-                    <Edit className="w-4 h-4" />
+                    <Edit className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => handleEliminar(announcement)}
-                    className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-md"
+                    className="p-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md hover:shadow-lg hover:scale-105"
                     title="Eliminar comunicado"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
 
