@@ -17,13 +17,14 @@ import { Home } from "lucide-react"
 import Homepage from "./Pages/HomePage"
 import CalendarioAdmin from "./Pages/ADMIN/CalendarioAdmin"
 import DirectorioFuncionariosAdmin from "./Pages/ADMIN/Directoriofuncionariosadmin"
+import ComunicadosOficialesAdmin from "./Pages/ADMIN/Comunicadosoficialesadmin"
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<DirectorioFuncionariosAdmin/>} />
+        <Route path="/" element={<ComunicadosOficialesAdmin/>} />
       </Routes>
     </Router>
   )
