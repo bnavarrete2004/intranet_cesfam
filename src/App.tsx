@@ -18,19 +18,23 @@ import Homepage from "./Pages/HomePage"
 import CalendarioAdmin from "./Pages/ADMIN/CalendarioAdmin"
 import DirectorioFuncionariosAdmin from "./Pages/ADMIN/Directoriofuncionariosadmin"
 import ComunicadosOficialesAdmin from "./Pages/ADMIN/Comunicadosoficialesadmin"
+import TableroActividadesAdmin from "./Pages/ADMIN/TableroActividadesAdmin"
 
+// ⬇️ AGREGAR ESTA LÍNEA
+import { ToastProvider } from "./components/common/Toast"
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<ComunicadosOficialesAdmin/>} />
-      </Routes>
-    </Router>
+    // ⬇️ ENVOLVER TODO CON TOASTPROVIDER
+    <ToastProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<TableroActividadesAdmin/>} />
+        </Routes>
+      </Router>
+    </ToastProvider>
+    // ⬆️ CERRAR TOASTPROVIDER
   )
 }
 
-
-
 export default App
-
